@@ -1,7 +1,7 @@
 
 public interface LanChatRoomIntf {
 	
-	public void setServer(String host,String port);
+	public void setServer(String host,int port);
 
 	public void setClientConnection(String ID);
 	
