@@ -1,26 +1,29 @@
 import java.io.IOException;
 
+import Client.Client;
+import Client.ClientBuilder;
 import Server.Server;
 import Server.ServerBuilder;
 
 public class LanChatRoom implements LanChatRoomIntf{
-private Server currentServer=null;
+private Server currentServer;
+private String currentHost;
+private int currentPort;
+private Client currentClient;
 	@Override
-	public void setServer(String host, int port) {
+	public void setServer(String host, int port) throws IOException {
 		// TODO Auto-generated method stub
-		try {
-			currentServer=new ServerBuilder().setHost(host).setPort(port).build();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Could not listen through port:"+port);
-			e.printStackTrace();
-		}
+		
+		currentHost=host;
+		currentPort=port;
+		currentServer=new ServerBuilder().setHost(host).setPort(port).build();
+		
 	}
 
 	@Override
 	public void setClientConnection(String ID) {
 		// TODO Auto-generated method stub
-		
+		currentClient=new ClientBuilder().setHost(currentHost).setPort(currentPort).build();
 	}
 
 	@Override
