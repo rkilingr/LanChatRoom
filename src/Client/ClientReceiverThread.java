@@ -32,7 +32,7 @@ public class ClientReceiverThread implements Runnable {
 				input	= in.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			if(input!=null)
 				try {

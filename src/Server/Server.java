@@ -27,11 +27,7 @@ private static HashMap<String,ServerThread> serverThreads;
 		// TODO Auto-generated method stub
 		while(true) {
 			try {
-
-				System.out.println("Accepting clients....");
 				Socket 			socket			= serverSocket.accept();
-
-				System.out.println("Client Accepted....");
 				ServerThread 	serverThread	= new ServerThread(socket,serverThreads.size()+1);
 				new Thread(serverThread).start();
 			}

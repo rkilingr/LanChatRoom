@@ -33,8 +33,18 @@ public class ClientSenderThread implements Runnable{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(input.equalsIgnoreCase("Bye")) {
+				out.println("Bye");
+				break;
+			}
 			if(input!=null)
 				out.println(input);
+		}
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}

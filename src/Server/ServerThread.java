@@ -23,18 +23,19 @@ private String serverThreadName;
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			in	= new BufferedReader(new InputStreamReader(currentSocket.getInputStream()));
-			out	= new PrintWriter(currentSocket.getOutputStream(),true);
+			in					= new BufferedReader(new InputStreamReader(currentSocket.getInputStream()));
+			out					= new PrintWriter(currentSocket.getOutputStream(),true);
 			out.println("Enter your Network NickName:\t");
-			serverThreadName=in.readLine();
+			serverThreadName	= in.readLine();
 			Server.getClients().put(serverThreadName, this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Client with ID:"+serverThreadID+" has trouble communicating");
 			e.printStackTrace();
-		}
-		
-
+		}				
+		for(ServerThread client:Server.getClients().values()) 
+			client.getWriter().println("\t\t\t"+serverThreadName+" is Online");
+			
 		while(!currentSocket.isClosed()) {
 			String input	= null;
 			try {
@@ -44,10 +45,23 @@ private String serverThreadName;
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			if(input.equalsIgnoreCase("Bye")) {
+				Server.getClients().remove(serverThreadName);
+				try {
+					currentSocket.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			if(input!=null) {
 				
 				for(ServerThread client:Server.getClients().values()) {
-					client.getWriter().println(serverThreadName+":"+input);
+					if(!client.serverThreadName.equals(this.serverThreadName))
+						client.getWriter().println(serverThreadName+":"+input);
+					else
+
+						client.getWriter().println("Yourself:"+input);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 import java.io.IOException;
-import java.net.UnknownHostException;
+import java.net.InetAddress;
 import java.util.Scanner;
 
 public class Test {
@@ -9,16 +9,19 @@ public class Test {
 		LanChatRoom 	lanChatRoom		= null;
 		Scanner 		in				= new Scanner(System.in);
 		try {
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			if(args.length!=0)
-				lanChatRoom		= new LanChatRoomBuilder().setHost("localhost").setPort(Integer.parseInt(args[0])).build();
+				lanChatRoom		= new LanChatRoomBuilder().setHost(args[0]).setPort(Integer.parseInt(args[1])).build();
 			else
-				lanChatRoom		= new LanChatRoomBuilder().setHost("localhost").setPort(5000).build();
+				lanChatRoom		= new LanChatRoomBuilder().setHost(InetAddress.getLocalHost().getHostName()).setPort(5000).build();
 			lanChatRoom.setClientConnection();
 		} catch (NumberFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		final LanChatRoom lanChatRoom2	= lanChatRoom;
+		
+		//Sender Thread
 		new Thread(new Runnable() {
 			
 			@Override
@@ -33,6 +36,8 @@ public class Test {
 					}
 			}
 		}).start();
+		
+		//Receiver thread
 		new Thread(new Runnable() {
 			
 			@Override
