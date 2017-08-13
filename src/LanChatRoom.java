@@ -1,47 +1,47 @@
 import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.concurrent.ArrayBlockingQueue;
 
 import Client.Client;
 import Client.ClientBuilder;
 import Server.Server;
 import Server.ServerBuilder;
 
-public class LanChatRoom implements LanChatRoomIntf{
+public class LanChatRoom{
 private Server currentServer;
 private String currentHost;
 private int currentPort;
 private Client currentClient;
-	@Override
-	public void setServer(String host, int port) throws IOException {
+	public LanChatRoom(String host, int port) throws IOException {
 		// TODO Auto-generated method stub
-		
-		currentHost=host;
-		currentPort=port;
-		currentServer=new ServerBuilder().setHost(host).setPort(port).build();
-		
+		System.out.println("Initializing Server....");
+		currentHost			= host;
+		currentPort			= port;
+		currentServer		= new ServerBuilder().setHost(host).setPort(port).build();
+		Thread serverThread	= new Thread(currentServer);
+		serverThread.start();
 	}
 
-	@Override
-	public void setClientConnection(String ID) {
+	public void setClientConnection() throws UnknownHostException, IOException {
 		// TODO Auto-generated method stub
-		currentClient=new ClientBuilder().setHost(currentHost).setPort(currentPort).build();
+		currentClient	= new ClientBuilder().setHost(currentHost).setPort(currentPort).build();
+		currentClient.start();
 	}
 
-	@Override
 	public String[] getConnection() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
-	public void sendMessage(String msg) {
+	public void sendMessage(String msg) throws InterruptedException {
 		// TODO Auto-generated method stub
-		
+		Client.putMessagetoSQueue(msg);
 	}
 
-	@Override
-	public String receiveMessage() {
+	public String receiveMessage() throws InterruptedException {
 		// TODO Auto-generated method stub
-		return null;
+		String msg	= Client.getMessageFromRQueue();
+		return msg;
 	}
 
 	

@@ -12,36 +12,44 @@ private Socket currentSocket;
 private BufferedReader in;
 private PrintWriter out;
 private int serverThreadID;
+private String serverThreadName;
 	public ServerThread(Socket socket,int ID) {
 		// TODO Auto-generated constructor stub
-		currentSocket=socket;
-		serverThreadID=ID;
+		currentSocket	= socket;
+		serverThreadID	= ID;
 	}
 
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 		try {
-			out=new PrintWriter(currentSocket.getOutputStream(),true);
-			in=new BufferedReader(new InputStreamReader(currentSocket.getInputStream()));
+			in	= new BufferedReader(new InputStreamReader(currentSocket.getInputStream()));
+			out	= new PrintWriter(currentSocket.getOutputStream(),true);
+			out.println("Enter your Network NickName:\t");
+			serverThreadName=in.readLine();
+			Server.getClients().put(serverThreadName, this);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Client with ID:"+serverThreadID+" has trouble communicating");
 			e.printStackTrace();
 		}
 		
+
 		while(!currentSocket.isClosed()) {
-			String input = null;
+			String input	= null;
 			try {
+
 				input = in.readLine();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			if(input!=null)
-				for(ServerThread client:Server.getClients()) {
-					client.getWriter().write(input);
+			if(input!=null) {
+				
+				for(ServerThread client:Server.getClients().values()) {
+					client.getWriter().println(serverThreadName+":"+input);
 				}
+			}
 		}
 	}
 	public PrintWriter getWriter() {
